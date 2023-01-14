@@ -1,6 +1,5 @@
 function doConvert (){
-    let numberInput = document.querySelector('#numberInput').value ;
-    let myDiv = document.querySelector('#result');
+    
 
     let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
     'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
@@ -8,7 +7,7 @@ function doConvert (){
 
     if(numberInput.toString().length > 7) return myDiv.innerHTML = 'overlimit' ;
     console.log(numberInput);
-    //let num = ('0000000000'+ numberInput).slice(-10).match(/^(\d{1})(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    
   let num = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
     console.log(num);
     if(!num) return;
