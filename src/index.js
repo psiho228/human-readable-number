@@ -1,23 +1,37 @@
-function doConvert (){
-    
+function humanize(num){
+  var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+              'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+              'seventeen', 'eighteen', 'nineteen'];
+  var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty',
+              'ninety'];
 
-    let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
-    'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
-    let tenth = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
+  var numString = num.toString();
 
-    if(numberInput.toString().length > 7) return myDiv.innerHTML = 'overlimit' ;
-    console.log(numberInput);
-    
-  let num = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    console.log(num);
-    if(!num) return;
+  if (num < 0) throw new Error('Negative numbers are not supported.');
 
-    let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}` )+' million ' : ''; 
-  
-    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'hundred ' : ''; 
-    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' thousand ' : ''; 
-    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'hundred ': ''; 
-    outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : ''; 
+  if (num === 0) return 'zero';
 
-    myDiv.innerHTML = outputText;
+  //the case of 1 - 20
+  if (num < 20) {
+    return ones[num];
+  }
+
+  if (numString.length === 2) {
+    return tens[numString[0]] + ' ' + ones[numString[1]];
+  }
+
+  //100 and more
+  if (numString.length == 3) {
+    if (numString[1] === '0' && numString[2] === '0')
+      return ones[numString[0]] + ' hundred';
+    else
+      return ones[numString[0]] + ' hundred and ' + convert(+(numString[1] + numString[2]));
+  }
+
+  if (numString.length === 4) {
+    var end = +(numString[1] + numString[2] + numString[3]);
+    if (end === 0) return ones[numString[0]] + ' thousand';
+    if (end < 100) return ones[numString[0]] + ' thousand and ' + convert(end);
+    return ones[numString[0]] + ' thousand ' + convert(end);
+  }
 }
