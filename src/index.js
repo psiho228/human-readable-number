@@ -1,23 +1,22 @@
 module.exports = function toReadable (number){
-  var th_val = ['', 'thousand', 'million', 'billion', 'trillion'];
-  // System for uncomment this line for Number of English 
-  // var th_val = ['','thousand','million', 'milliard','billion'];
+  
+  var th_val = ['','thousand','million', 'milliard','billion'];
    
   var dg_val = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-  var tn_val = ['ten', 'eleven','twelve','thirteen','fourteen', 'fifteen','sixteen', 'seventeen','eighteen', ' nineteen'];
-  var tw_val = ['twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-  
+  var tn_val = ['ten', 'eleven','twelve','thirteen','fourteen', 'fifteen','sixteen', 'seventeen','eighteen','nineteen'];
+  var tw_val = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    
     number = number.toString();
-    number = number.replace(/[\, ]/g, ' ');
+    number = number.replace(/[\, ]/g,'');
       if (number != parseFloat(number))
           return 'not a number ';
-      var x_val = number.indexOf('.');
+      var x_val = number.indexOf();
       if (x_val == -1)
           x_val = number.length;
       if (x_val > 15)
           return 'too big';
       var n_val = number.split('');
-      var str_val = ' ';
+      var str_val = '';
       var sk_val = 0;
       for (var i = 0; i < x_val; i++) {
           if ((x_val - i) % 3 == 2) {
@@ -47,5 +46,5 @@ module.exports = function toReadable (number){
           for (var i = x_val + 1; i < y_val; i++)
               str_val += dg_val[n_val[i]] + ' ';
       }
-      return str_val.replace(/\number+/g, ' ');
+      return str_val.trim();
   }
