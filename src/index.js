@@ -8,6 +8,7 @@ module.exports = function toReadable (number){
     
     number = number.toString();
     number = number.replace(/[\, ]/g,'');
+  if (number<1) return "zero";
       if (number != parseFloat(number))
           return 'not a number ';
       var x_val = number.indexOf();
