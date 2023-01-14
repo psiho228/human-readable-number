@@ -1,94 +1,24 @@
-function toReadable{
-    var bigNumArry = new Array('', ' thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion');
+function toReadable (){
+    let numberInput = document.querySelector('#numberInput').value ;
+    let myDiv = document.querySelector('#result');
 
-    var output = '';
-    var numString =   document.getElementById('number').value;
-    var finlOutPut = new Array();
+    let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
+    'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
+    let tenth = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
 
-    if (numString == '0') {
-        document.getElementById('container').innerHTML = 'Zero';
-        return;
-    }
+    if(numberInput.toString().length > 7) return myDiv.innerHTML = 'overlimit' ;
+    console.log(numberInput);
+   
+  let num = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
+    console.log(num);
+    if(!num) return;
 
-    if (numString == 0) {
-        document.getElementById('container').innerHTML = 'messeg tell to enter numbers';
-        return;
-    }
+    let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}` )+' million ' : ''; 
+  
+    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'hundred ' : ''; 
+    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' thousand ' : ''; 
+    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'hundred ': ''; 
+    outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : ''; 
 
-    var i = numString.length;
-    i = i - 1;
-
-    //cut the number to grups of three digits and add them to the Arry
-    while (numString.length > 3) {
-        var triDig = new Array(3);
-        triDig[2] = numString.charAt(numString.length - 1);
-        triDig[1] = numString.charAt(numString.length - 2);
-        triDig[0] = numString.charAt(numString.length - 3);
-
-        var varToAdd = triDig[0] + triDig[1] + triDig[2];
-        finlOutPut.push(varToAdd);
-        i--;
-        numString = numString.substring(0, numString.length - 3);
-    }
-    finlOutPut.push(numString);
-    finlOutPut.reverse();
-
-    //conver each grup of three digits to english word
-    //if all digits are zero the triConvert
-    //function return the string "dontAddBigSufix"
-    for (j = 0; j < finlOutPut.length; j++) {
-        finlOutPut[j] = triConvert(parseInt(finlOutPut[j]));
-    }
-
-    var bigScalCntr = 0; //this int mark the million billion trillion... Arry
-
-    for (b = finlOutPut.length - 1; b >= 0; b--) {
-        if (finlOutPut[b] != "dontAddBigSufix") {
-            finlOutPut[b] = finlOutPut[b] + bigNumArry[bigScalCntr] + ' , ';
-            bigScalCntr++;
-        }
-        else {
-            //replace the string at finlOP[b] from "dontAddBigSufix" to empty String.
-            finlOutPut[b] = ' ';
-            bigScalCntr++; //advance the counter  
-        }
-    }
-
-        //convert The output Arry to , more printable string 
-        for(n = 0; n<finlOutPut.length; n++){
-            output +=finlOutPut[n];
-        }
-
-    document.getElementById('container').innerHTML = output;//print the output
-}
-
-//simple function to convert from numbers to words from 1 to 999
-function triConvert(num){
-    var ones = new Array('', ' one', ' two', ' three', ' four', ' five', ' six', ' seven', ' eight', ' nine', ' ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
-    var tens = new Array('', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety');
-    var hundred = ' hundred';
-    var output = '';
-    var numString = num.toString();
-
-    if (num == 0) {
-        return 'dontAddBigSufix';
-    }
-    //the case of 10, 11, 12 ,13, .... 19 
-    if (num < 20) {
-        output = ones[num];
-        return output;
-    }
-
-    //100 and more
-    if (numString.length == 3) {
-        output = ones[parseInt(numString.charAt(0))] + hundred;
-        output += tens[parseInt(numString.charAt(1))];
-        output += ones[parseInt(numString.charAt(2))];
-        return output;
-    }
-
-    output += tens[parseInt(numString.charAt(0))];
-    output += ones[parseInt(numString.charAt(1))];
-
-    return output;
+    myDiv.innerHTML = outputText;
 }
