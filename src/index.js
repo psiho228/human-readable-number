@@ -1,23 +1,51 @@
-function toReadable (){
-  
-
-    let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
-    'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
-    let tenth = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
-
-    if(numberInput.toString().length > 7) return 'overlimit' ;
-    console.log(numberInput);
+module.exports = function toReadable (number){
+  var th_val = ['', 'thousand', 'million', 'billion', 'trillion'];
+  // System for uncomment this line for Number of English 
+  // var th_val = ['','thousand','million', 'milliard','billion'];
    
-  let num = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    console.log(num);
-    if(!num) return;
-
-    let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}` )+' million ' : ''; 
+  var dg_val = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  var tn_val = ['ten', 'eleven','twelve','thirteen','fourteen', 'fifteen','sixteen', 'seventeen','eighteen', ' nineteen'];
+  var tw_val = ['twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
   
-    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'hundred ' : ''; 
-    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' thousand ' : ''; 
-    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'hundred ': ''; 
-    outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : ''; 
-
-    return;
-}
+    number = number.toString();
+    number = number.replace(/[\, ]/g, ' ');
+      if (number != parseFloat(number))
+          return 'not a number ';
+      var x_val = number.indexOf('.');
+      if (x_val == -1)
+          x_val = number.length;
+      if (x_val > 15)
+          return 'too big';
+      var n_val = number.split('');
+      var str_val = ' ';
+      var sk_val = 0;
+      for (var i = 0; i < x_val; i++) {
+          if ((x_val - i) % 3 == 2) {
+              if (n_val[i] == '1') {
+                  str_val += tn_val[Number(n_val[i + 1])] + ' ';
+                  i++;
+                  sk_val = 1;
+              } else if (n_val[i] != 0) {
+                  str_val += tw_val[n_val[i] - 2] + ' ';
+                  sk_val = 1;
+              }
+          } else if (n_val[i] != 0) {
+              str_val += dg_val[n_val[i]] + ' ';
+              if ((x_val - i) % 3 == 0)
+                  str_val += 'hundred ';
+              sk_val = 1;
+          }
+          if ((x_val - i) % 3 == 1) {
+              if (sk_val)
+                  str_val += th_val[(x_val - i - 1) / 3] + ' ';
+              sk_val = 0;
+          }
+      }
+      if (x_val != number.length) {
+          var y_val = number.length;
+          str_val += 'point';
+          for (var i = x_val + 1; i < y_val; i++)
+              str_val += dg_val[n_val[i]] + ' ';
+      }
+      return str_val.replace(/\number+/g, ' ');
+  }
